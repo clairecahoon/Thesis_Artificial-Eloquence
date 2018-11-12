@@ -40,6 +40,15 @@ class LiteraryAnalyzer:
         
         self.proCount = 0
         self.proPerc = 0
+        
+        self.detCount = 0
+        self.detPerc = 0
+        
+        self.conCount = 0
+        self.conPerc = 0
+        
+        self.advCount = 0
+        self.advPerc = 0
 
         #Word List
         self.words = {}
@@ -85,14 +94,28 @@ class LiteraryAnalyzer:
         	if POS[i][1] == "NN" or POS[i][1] == "NNS" or POS[i][1] == "NNP" or POS[i][1] == "NNPS":
         		self.nounCount += 1
         	#Verbs:
-        	elif POS[i][1] == "VB" or POS[i][1] == "VBZ" or POS[i][1] == "VBP" or POS[i][1] == "VBD" or POS[i][1] == "VBN" or POS[i][1] == "VBG":
+        	elif POS[i][1] == "VB" or POS[i][1] == "VBZ" or POS[i][1] == "VBP" or POS[i][1] == "VBD" or POS[i][1] == "VBN" or POS[i][1] == "VBG" or POS[i][1] == "MD":
         		self.verbCount += 1
-        	#Adjective and Adverbs:
+        	#Adjective:
         	elif POS[i][1] == "JJ" or POS[i][1] == "JJR" or POS[i][1] == "JJS" or POS[i][1] == "RB" or POS[i][1] == "RBR" or POS[i][1] == "RBS" or POS[i][1] == "RP":
         		self.adCount += 1
+        		
+        	#Adverbs:
+        	elif POS[i][1] == "RB" or POS[i][1] == "RBR" or POS[i][1] == "RBS" or POS[i][1] == "RP" or POS[i][1] == "WRB":
+        		self.advCount += 1
+        	
         	#Pronouns:
-        	elif POS[i][1] == "PRP" or POS[i][1] == "PSP$":
+        	elif POS[i][1] == "PRP" or POS[i][1] == "PSP$" or POS[i][1] == "WP" or POS[i][1] == "WP$":
         		self.proCount += 1
+        		
+        	#Determiners:
+        	elif POS[i][1] == "DT" or POS[i][1] == "WDT" or POS[i][1] == "PDT":
+        		self.detCount += 1
+        		
+        	#Conjunctions:
+        	elif POS[i][1] == "CC" or POS[i][1] == "IN":
+        		self.conCount += 1
+
         
         #print(POS[0][1]=="DT")
         
@@ -108,7 +131,15 @@ class LiteraryAnalyzer:
         
         proCalc = self.proCount/self.numWords
         self.proPerc = round(proCalc, 2)
+        
+        advCalc = self.advCount/self.numWords
+        self.advPerc = round(advCalc, 2)
 
+        detCalc = self.detCount/self.numWords
+        self.detPerc = round(detCalc, 2)
+        
+        conCalc = self.conCount/self.numWords
+        self.conPerc = round(conCalc, 2)
 
     def countWords(self):
         '''Counts the number of total words'''
@@ -179,10 +210,16 @@ class LiteraryAnalyzer:
         info += "\n Percentage of nouns:\t" + str(self.nounPerc) + "%"
         info += "\n Number of verbs:\t" + str(self.verbCount)
         info += "\n Percentage of verbs:\t" + str(self.verbPerc) + "%"
-        info += "\n Number of adjectives and adverbs:\t" + str(self.adCount)
-        info += "\n Percentage of adjectives and adverbs:\t" + str(self.adPerc) + "%"
+        info += "\n Number of adjectives:\t" + str(self.adCount)
+        info += "\n Percentage of adjectives:\t" + str(self.adPerc) + "%"
         info += "\n Number of pronouns:\t" + str(self.proCount)
         info += "\n Percentage of pronouns:\t" + str(self.proPerc) + "%"
+        info += "\n Number of determiners:\t" + str(self.detCount)
+        info += "\n Percentage of determiners:\t" + str(self.detPerc) + "%"
+        info += "\n Number of conjunctions:\t" + str(self.conCount)
+        info += "\n Percentage of conjunctions:\t" + str(self.conPerc) + "%"
+        info += "\n Number of adverbs:\t" + str(self.advCount)
+        info += "\n Percentage of adverbs:\t" + str(self.advPerc) + "%"
 
         return info
 
@@ -241,9 +278,13 @@ def uniqueWords(theBlob, theDict):
     newWords = sorted(words, key=words.get, reverse=True)[:10]
     commonWords = newWords
 
+	#Calculate Unique words percentage
+    uniqPerc = (uniqueWords/len(wordBlob))*100
+    uniqRound = round(uniqPerc, 2)
 	
     print("\nWord Lists:\n Number of 'I' uses: " + str(iCount) 
-    	+ "\n Number of unique words:\t" + str(uniqueWords) 
+    	+ "\n Number of unique words:\t" + str(uniqueWords)
+    	+ "\n Percentange of Unique Words:\t" + str(uniqRound) + "%" 
     	+ "\n Number of misspelled words:\t" + str(wrongWordCount) 
     	+ "\n\n Top ten common words:\t")
     for comWord in commonWords:
